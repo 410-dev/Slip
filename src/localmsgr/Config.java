@@ -12,8 +12,8 @@ import localmsgr.data.MessageData;
 public class Config {
 
     public static final int configVersion = 1;
-    public static final int communicationProtocolVersion = 1;
-    public static final String programVersion = "1.0";
+    public static final int communicationProtocolVersion = 2;
+    public static final String programVersion = "2.0";
 
     public static String myIP = "";
     public static String myName = "";
