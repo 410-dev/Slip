@@ -45,7 +45,8 @@ public class SocketIO {
                         }
                     }
                 }catch(Exception e){
-                    SystemLogger.error("Error while waiting for input", false, SystemLogger.CONTINUE, e);
+                    if (e.toString().contains("Address already in use")) {
+                        SystemLogger.error("Port " + Config.recvPort + " is already in use. Please close the program using such port and try again.", true, SystemLogger.EXIT, e);
                 }
             }
         };
