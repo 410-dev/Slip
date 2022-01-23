@@ -79,7 +79,7 @@ public class SendMessageWindow extends JFrame {
         if (originalMessage != null) {
             messageArea.setText("*************\nOriginal Message from " + name + "\n");
             messageArea.append(originalMessage);
-            messageArea.append("*************\n\nReply:\n");
+            messageArea.append("\n*************\n\nReply:\n");
         }
 
         messageArea.setVisible(true);

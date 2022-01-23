@@ -13,7 +13,7 @@ public class Config {
 
     public static final int configVersion = 1;
     public static final int communicationProtocolVersion = 2;
-    public static final String programVersion = "2.2";
+    public static final String programVersion = "2.3";
 
     public static String myIP = "";
     public static String myName = "";
