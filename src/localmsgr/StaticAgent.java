@@ -29,7 +29,7 @@ public class StaticAgent {
             returnedQuery = messageWithMetaData;
         }else{
             // eventedData.add(qd);
-            SystemLogger.log("Message received: " + messageWithMetaData);
+            SystemLogger.debug("Message received: " + messageWithMetaData);
             new ReceivedMessageWindow(qd);
         }
     }

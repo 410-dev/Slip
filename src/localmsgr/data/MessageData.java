@@ -51,12 +51,12 @@ public class MessageData {
         if (this.date == null) this.date = DateManager.getTimestamp();                // If the date is not set, set it to the current date
         s += "DATE=" + this.date + ";";
 
-        SystemLogger.log("Built string: " + s);
         if (this.fileName != null && this.fileContent != null) {
             s += "FILENAME=" + this.fileName + ";";
             s += "FILECONTENT=" + this.fileContent + ";";
         }
 
+        SystemLogger.debug("Built string: " + s);
         return s;
     }
 
