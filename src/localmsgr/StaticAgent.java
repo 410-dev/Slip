@@ -1,6 +1,6 @@
 package localmsgr;
 
-import localmsgr.data.QueryData;
+import localmsgr.data.MessageData;
 import localmsgr.net.SocketIO;
 import localmsgr.ui.ReceivedMessageWindow;
 
@@ -16,10 +16,10 @@ public class StaticAgent {
             return;
         }
 
-        QueryData qd = QueryData.parseRespond(messageWithMetaData);
+        MessageData qd = MessageData.parseRespond(messageWithMetaData);
         if (qd.message.equals(Config.deviceInfoRequestMessage)) {
             SystemLogger.log("Device info request received. Sending device info.");
-            QueryData thisDeviceData = new QueryData(Config.myIP, Config.myName, Config.recvPort, Config.deviceInfoReplyMessage, DateManager.getTimestamp());
+            MessageData thisDeviceData = new MessageData(Config.myIP, Config.myName, Config.recvPort, Config.deviceInfoReplyMessage, DateManager.getTimestamp());
             thisDeviceData.progVersion = Config.programVersion;
             thisDeviceData.version = Config.communicationProtocolVersion;
             SocketIO.sendData(qd.ip, qd.recvPort, thisDeviceData.buildString());

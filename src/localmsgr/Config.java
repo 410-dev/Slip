@@ -7,7 +7,7 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.util.ArrayList;
 
-import localmsgr.data.QueryData;
+import localmsgr.data.MessageData;
 
 public class Config {
 
@@ -27,7 +27,7 @@ public class Config {
 
     public static int updateInterval = 30; // seconds
 
-    public static ArrayList<QueryData> talkables = new ArrayList<QueryData>();
+    public static ArrayList<MessageData> talkables = new ArrayList<MessageData>();
     public static String deviceInfoRequestMessage = "DEVICEINFO_REQUEST_MESSAGE";
     public static String deviceInfoReplyMessage = "DEVICEINFO_REPLY_MESSAGE";
 

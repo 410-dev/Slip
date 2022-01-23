@@ -15,7 +15,7 @@ import localmsgr.CoreBase64;
 import localmsgr.DateManager;
 import localmsgr.Config;
 import localmsgr.SystemLogger;
-import localmsgr.data.QueryData;
+import localmsgr.data.MessageData;
 import localmsgr.net.SocketIO;
 
 public class SendMessageWindow extends JFrame {
@@ -135,7 +135,7 @@ public class SendMessageWindow extends JFrame {
         Thread t = new Thread() {
             public void run() {
                 String message = CoreBase64.encode(messageFromBox);
-                QueryData qd = new QueryData(Config.myIP, Config.myName, Config.recvPort, message, DateManager.getTimestamp());
+                MessageData qd = new MessageData(Config.myIP, Config.myName, Config.recvPort, message, DateManager.getTimestamp());
                 boolean sent = SocketIO.sendData(ip, port, qd.buildString());
                 if (sent) {
                     SystemLogger.log("Message sent.");

@@ -14,7 +14,7 @@ import java.awt.event.KeyAdapter;
 
 import localmsgr.Config;
 import localmsgr.SystemLogger;
-import localmsgr.data.QueryData;
+import localmsgr.data.MessageData;
 import localmsgr.net.LocalNetwork;
 
 public class MainWindow extends JFrame {
@@ -148,7 +148,7 @@ public class MainWindow extends JFrame {
     public void updateList() {
         try {
             listModel.clear();
-            for (QueryData q : Config.talkables) {
+            for (MessageData q : Config.talkables) {
                 if (q.compatible) {
                     listModel.addElement(q.name + " (" + q.ip + ")");
                 } else {
@@ -197,7 +197,7 @@ public class MainWindow extends JFrame {
                 if (evt.getClickCount() == 2) {
                     int index = list.locationToIndex(evt.getPoint());
                     if (index != -1) {
-                        QueryData q = Config.talkables.get(index);
+                        MessageData q = Config.talkables.get(index);
                         if (q.compatible) {
                             new SendMessageWindow(q.name, q.ip, q.recvPort, null);
                         }

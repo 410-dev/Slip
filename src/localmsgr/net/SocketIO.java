@@ -10,7 +10,7 @@ import java.net.Socket;
 import localmsgr.Config;
 import localmsgr.StaticAgent;
 import localmsgr.SystemLogger;
-import localmsgr.data.QueryData;
+import localmsgr.data.MessageData;
 
 public class SocketIO {
 
@@ -37,7 +37,6 @@ public class SocketIO {
                             Socket socket = serverSocket.accept();
                             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                             String inboundMessage = in.readLine();
-                            SystemLogger.log("Inbound message: " + inboundMessage);
                             StaticAgent.onMessageRecv(inboundMessage);
                             socket.close();
                             
@@ -71,7 +70,7 @@ public class SocketIO {
     public static boolean requestDeviceInformation(String ip) {
         SystemLogger.log("Requesting device information for " + ip + "...");
         try {
-            return sendData(ip, Config.recvPort, QueryData.deviceInformationRequestBuilder());
+            return sendData(ip, Config.recvPort, MessageData.deviceInformationRequestBuilder());
         }catch(Exception e) {
             if (!e.toString().contains("Connection refused")) e.printStackTrace();
             SystemLogger.log("Host " + ip + " refused to connect.");

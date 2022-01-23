@@ -10,7 +10,7 @@ import localmsgr.SystemLogger;
 // This class will parse / build the message in a string format.
 // The instance will contain the informations about the sender and the message.
 
-public class QueryData {
+public class MessageData {
 
     public int version;                 // The version of the protocol used
     public String progVersion;          // The version of the program
@@ -19,10 +19,12 @@ public class QueryData {
     public int recvPort;                // The port of the origin of message
     public String message;              // The message itself (Encoded with Base64)
     public String date;                 // The date of the message
+    public String fileName;             // The name of the file attached to the message (Encoded with Base64)
+    public String fileContent;          // The content of the file attached to the message (Encoded with Base64)
     public boolean compatible = true;   // If the instance is compatible with the current version of the program
 
     // Constructor
-    public QueryData(String ip, String name, int recvPort, String message, String date) {
+    public MessageData(String ip, String name, int recvPort, String message, String date) {
         this.ip = ip;
         this.name = name;
         this.recvPort = recvPort;
@@ -30,7 +32,7 @@ public class QueryData {
         this.date = date;
     }
 
-    public QueryData(){}
+    public MessageData(){}
 
 
     // Convert current instance to a string
@@ -69,10 +71,10 @@ public class QueryData {
     }
 
     // Parse a string to a QueryData instance
-    public static QueryData parseRespond(String respond) {
+    public static MessageData parseRespond(String respond) {
         String[] lines = respond.split(";");                          // Split the string by ;
 
-        QueryData q = new QueryData();
+        MessageData q = new MessageData();
 
         for (String line : lines) {                                   // For each line
             String[] keyValue = line.split("=");                      // Split the line by =         

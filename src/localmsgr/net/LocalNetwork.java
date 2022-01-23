@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import localmsgr.Config;
 import localmsgr.StaticAgent;
 import localmsgr.SystemLogger;
-import localmsgr.data.QueryData;
+import localmsgr.data.MessageData;
 
 public class LocalNetwork {
 
@@ -37,7 +37,7 @@ public class LocalNetwork {
     
         // Scan the local network in multithread (Faster)
         Thread[] threads = new Thread[255];
-        ArrayList<QueryData> talkables = new ArrayList<>();
+        ArrayList<MessageData> talkables = new ArrayList<>();
 
         // Scan the ips: 192.168.x.[1-255]
         for(int i = 1; i < 256; i++) {
@@ -68,7 +68,7 @@ public class LocalNetwork {
                                     }
 
                                     // Add to talkable list
-                                    talkables.add(QueryData.parseRespond(StaticAgent.returnedQuery));
+                                    talkables.add(MessageData.parseRespond(StaticAgent.returnedQuery));
                                     SystemLogger.log("Added talkable: " + talkables.get(talkables.size()-1).ip);
                                 }
                             }

@@ -19,10 +19,10 @@ import java.awt.event.KeyAdapter;
 import localmsgr.CoreBase64;
 import localmsgr.Config;
 import localmsgr.SystemLogger;
-import localmsgr.data.QueryData;
+import localmsgr.data.MessageData;
 
 public class ReceivedMessageWindow extends JFrame {
-    public QueryData qd;
+    public MessageData qd;
 
     public JLayeredPane contentPane;
 
@@ -41,7 +41,7 @@ public class ReceivedMessageWindow extends JFrame {
 
     public KeyAdapter onPressShiftEnterToReply;
 
-    public ReceivedMessageWindow(QueryData qd) {
+    public ReceivedMessageWindow(MessageData qd) {
 
         // // TODO: Figure out why the name and IP is swapped ONLY in this class
         // String name = qd.ip;
