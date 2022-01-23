@@ -13,7 +13,7 @@ public class Config {
 
     public static final int configVersion = 1;
     public static final int communicationProtocolVersion = 2;
-    public static final String programVersion = "2.1";
+    public static final String programVersion = "2.2";
 
     public static String myIP = "";
     public static String myName = "";
@@ -28,8 +28,8 @@ public class Config {
     public static int updateInterval = 30; // seconds
 
     public static ArrayList<MessageData> talkables = new ArrayList<MessageData>();
-    public static String deviceInfoRequestMessage = "DEVICEINFO_REQUEST_MESSAGE";
-    public static String deviceInfoReplyMessage = "DEVICEINFO_REPLY_MESSAGE";
+    public static final String deviceInfoRequestMessage = "DEVICEINFO_REQUEST_MESSAGE";
+    public static final String deviceInfoReplyMessage = "DEVICEINFO_REPLY_MESSAGE";
 
     public static void parseOptions(String options) {
         String[] optionsSplit = options.split("\n");
