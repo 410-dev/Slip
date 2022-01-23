@@ -51,10 +51,6 @@ public class Config {
                     }
                 } else if (optionSplit[0].equals("updateInterval")) {
                     updateInterval = Integer.parseInt(optionSplit[1]);
-                } else if (optionSplit[0].equals("deviceInfoRequestMessage")) {
-                    deviceInfoRequestMessage = optionSplit[1];
-                } else if (optionSplit[0].equals("deviceInfoReplyMessage")) {
-                    deviceInfoReplyMessage = optionSplit[1];
                 }
             }
         }
@@ -67,8 +63,6 @@ public class Config {
         toReturn += "messageReceiveWindowSize=" + messageReceiveWindowSize[0] + "," + messageReceiveWindowSize[1] + "\n";
         toReturn += "mainWindowSize=" + mainWindowSize[0] + "," + mainWindowSize[1] + "\n";
         toReturn += "updateInterval=" + updateInterval + "\n";
-        toReturn += "deviceInfoRequestMessage=" + deviceInfoRequestMessage + "\n";
-        toReturn += "deviceInfoReplyMessage=" + deviceInfoReplyMessage + "\n";
         return toReturn;
     }
 
