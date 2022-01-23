@@ -7,7 +7,7 @@ public class SystemLogger {
     public static final short CONTINUE = 1;
 
     public static boolean VERBOSE = true;
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     private static boolean hasPrintedDebugOn = true;
 
     public static void printDebugOn() {
