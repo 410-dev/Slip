@@ -52,6 +52,11 @@ public class MessageData {
         s += "DATE=" + this.date + ";";
 
         SystemLogger.log("Built string: " + s);
+        if (this.fileName != null && this.fileContent != null) {
+            s += "FILENAME=" + this.fileName + ";";
+            s += "FILECONTENT=" + this.fileContent + ";";
+        }
+
         return s;
     }
 

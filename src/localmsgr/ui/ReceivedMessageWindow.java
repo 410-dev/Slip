@@ -17,6 +17,7 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.event.KeyAdapter;
 
 import localmsgr.CoreBase64;
+import localmsgr.FileIO;
 import localmsgr.Config;
 import localmsgr.SystemLogger;
 import localmsgr.data.MessageData;
@@ -34,26 +35,23 @@ public class ReceivedMessageWindow extends JFrame {
     public JButton closeButton;
     public JButton replyButton;
     public JButton saveButton;
+    public JButton saveAttachedFileButton;
 
     public MouseInputAdapter closeButtonListener;
     public MouseInputAdapter replyButtonListener;
     public MouseInputAdapter saveButtonListener;
+    public MouseInputAdapter saveAttachedFileButtonListener;
 
     public KeyAdapter onPressShiftEnterToReply;
 
     public ReceivedMessageWindow(MessageData qd) {
-
-        // // TODO: Figure out why the name and IP is swapped ONLY in this class
-        // String name = qd.ip;
-        // qd.ip = qd.name;
-        // qd.name = name;
-        // // Done swapping
 
         this.qd = qd;
 
         setCloseButtonListener();
         setReplyButtonListener();
         setSaveButtonListener();
+        setSaveAttachedFileButtonListener();
         setShiftEnterToReply();
 
         this.setTitle("Message from " + qd.name);
@@ -104,6 +102,22 @@ public class ReceivedMessageWindow extends JFrame {
         saveButton.addMouseListener(saveButtonListener);
         saveButton.setVisible(true);
         contentPane.add(saveButton);
+
+        saveAttachedFileButton = new JButton("Save Attached File");
+        saveAttachedFileButton.setBounds(340, Config.messageReceiveWindowSize[1] - 55, Config.messageReceiveWindowSize[0] - 350, 30);
+        saveAttachedFileButton.addMouseListener(saveAttachedFileButtonListener);
+        
+        if (qd.fileName != null && qd.fileContent != null) {
+            saveAttachedFileButton.setEnabled(true);
+            qd.fileName = CoreBase64.decode(qd.fileName);
+            saveAttachedFileButton.setText("Save " + qd.fileName);
+        }else {
+            saveAttachedFileButton.setEnabled(false);
+            saveAttachedFileButton.setText("No Attached File");
+        }
+
+        saveAttachedFileButton.setVisible(true);
+        contentPane.add(saveAttachedFileButton);
         
         this.setContentPane(contentPane);
         this.setVisible(true);
@@ -133,6 +147,34 @@ public class ReceivedMessageWindow extends JFrame {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 new SendMessageWindow(qd.name, qd.ip, qd.recvPort, messageArea.getText());
+            }
+        };
+    }
+
+    public void setSaveAttachedFileButtonListener() {
+        saveAttachedFileButtonListener = new MouseInputAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setSelectedFile(new File(qd.fileName));
+                int returnVal = fileChooser.showSaveDialog(ReceivedMessageWindow.this);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+
+                    saveAttachedFileButton.setEnabled(false);
+                    saveAttachedFileButton.setText("Decoding...");
+
+                    Thread t = new Thread() {
+                        public void run() {
+                            File file = fileChooser.getSelectedFile();
+                            String data = CoreBase64.decode(qd.fileContent);
+                            FileIO.restoreFileFromString(data, file.getAbsolutePath());
+                            saveAttachedFileButton.setEnabled(true);
+                            saveAttachedFileButton.setText("File Saved");
+                        }
+                    };
+
+                    t.start();
+                }
             }
         };
     }

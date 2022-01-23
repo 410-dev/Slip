@@ -1,6 +1,7 @@
 package localmsgr.ui;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -13,6 +14,7 @@ import java.awt.event.KeyAdapter;
 
 import localmsgr.CoreBase64;
 import localmsgr.DateManager;
+import localmsgr.FileIO;
 import localmsgr.Config;
 import localmsgr.SystemLogger;
 import localmsgr.data.MessageData;
@@ -29,12 +31,17 @@ public class SendMessageWindow extends JFrame {
 
     public JButton closeButton;
     public JButton sendButton;
+    public JButton fileAttachButton;
 
     public MouseInputAdapter closeButtonListener;
     public MouseInputAdapter sendButtonListener;
+    public MouseInputAdapter fileAttachButtonListener;
 
     public KeyAdapter onPressShiftEnterToSend;
-
+    
+    public String fileName;
+    public String fileContentBase64Encoded;
+    
     public String ip;
     public int port;
 
@@ -46,6 +53,7 @@ public class SendMessageWindow extends JFrame {
         setShiftEnderToSend();
         setCloseButtonListener();
         setSendButtonListener();
+        setFileAttachButtonListener();
 
         this.setTitle("Message to " + name);
         this.setSize(Config.messageReceiveWindowSize[0], Config.messageReceiveWindowSize[1]);
@@ -92,7 +100,13 @@ public class SendMessageWindow extends JFrame {
         sendButton.addMouseListener(sendButtonListener);
         sendButton.setVisible(true);
         contentPane.add(sendButton);
-        
+
+        fileAttachButton = new JButton("Attach File");
+        fileAttachButton.setBounds(230, Config.messageReceiveWindowSize[1] - 55, Config.messageReceiveWindowSize[0] - 240, 30);
+        fileAttachButton.addMouseListener(fileAttachButtonListener);
+        fileAttachButton.setVisible(true);
+        contentPane.add(fileAttachButton);
+
         this.setContentPane(contentPane);
         this.setVisible(true);
     }
@@ -123,11 +137,60 @@ public class SendMessageWindow extends JFrame {
         };
     }
 
+    private void setFileAttachButtonListener() {
+        fileAttachButtonListener = new MouseInputAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                attachFile();
+            }
+        };
+    }
+
+    public void attachFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        fileChooser.setMultiSelectionEnabled(false);
+        int returnVal = fileChooser.showOpenDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            fileAttachButton.setText("Attaching...");
+            fileAttachButton.setEnabled(false);
+
+            sendButton.setEnabled(false);
+
+            Thread t = new Thread() {
+                public void run() {
+                    String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+                    String convertedFileContent = FileIO.convertFileToString(filePath);
+                    if (convertedFileContent == null) {
+                        fileName = null;
+                        fileContentBase64Encoded = null;
+                        fileAttachButton.setText("Attach File");
+                        fileAttachButton.setEnabled(true);
+                        sendButton.setEnabled(true);
+                        return;
+                    }
+
+                    fileName = fileChooser.getSelectedFile().getName();
+                    fileContentBase64Encoded = CoreBase64.encode(convertedFileContent);
+
+                    sendButton.setEnabled(true);
+                    fileAttachButton.setText(fileName);
+                    fileAttachButton.setEnabled(true);
+                }
+            };
+            t.start();
+        }
+    }
+
     public void send() {
         String messageFromBox = messageArea.getText();
         if (messageFromBox.equals("")) {
             SystemLogger.warning("Message is empty.");
             return;
+        }
+        
+        if (fileName != null && fileContentBase64Encoded != null) {
+            messageArea.append("\n\n*************\nFile Attached: " + fileName + "\n*************\n\n");
         }
 
         sendButton.setText("Sending...");
@@ -136,6 +199,12 @@ public class SendMessageWindow extends JFrame {
             public void run() {
                 String message = CoreBase64.encode(messageFromBox);
                 MessageData qd = new MessageData(Config.myIP, Config.myName, Config.recvPort, message, DateManager.getTimestamp());
+
+                if (fileName != null && fileContentBase64Encoded != null) {
+                    qd.fileName = CoreBase64.encode(fileName);
+                    qd.fileContent = fileContentBase64Encoded;
+                }
+
                 boolean sent = SocketIO.sendData(ip, port, qd.buildString());
                 if (sent) {
                     SystemLogger.log("Message sent.");
