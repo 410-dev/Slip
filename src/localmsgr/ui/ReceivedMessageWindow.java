@@ -103,14 +103,14 @@ public class ReceivedMessageWindow extends JFrame {
         saveButton.setVisible(true);
         contentPane.add(saveButton);
 
-        saveAttachedFileButton = new JButton("Save Attached File");
+        saveAttachedFileButton = new JButton("Save Attachment");
         saveAttachedFileButton.setBounds(340, Config.messageReceiveWindowSize[1] - 55, Config.messageReceiveWindowSize[0] - 350, 30);
         saveAttachedFileButton.addMouseListener(saveAttachedFileButtonListener);
         
         if (qd.fileName != null && qd.fileContent != null) {
             saveAttachedFileButton.setEnabled(true);
             qd.fileName = CoreBase64.decode(qd.fileName);
-            saveAttachedFileButton.setText("Save " + qd.fileName);
+            saveAttachedFileButton.setText("Save Attachment");
         }else {
             saveAttachedFileButton.setEnabled(false);
             saveAttachedFileButton.setText("No Attached File");
