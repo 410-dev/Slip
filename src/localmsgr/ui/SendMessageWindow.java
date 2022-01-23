@@ -77,9 +77,9 @@ public class SendMessageWindow extends JFrame {
         messageArea.addKeyListener(onPressShiftEnterToSend);
 
         if (originalMessage != null) {
-            messageArea.setText("*************\nReply written at" + DateManager.getTimestamp() + "\n*************\n\n");
+            messageArea.setText("*************\nOriginal Message from " + name + "\n");
             messageArea.append(originalMessage);
-            messageArea.append("\n\n*************\n\n");
+            messageArea.append("*************\n\nReply:\n");
         }
 
         messageArea.setVisible(true);
