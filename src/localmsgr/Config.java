@@ -22,6 +22,9 @@ public class Config {
     public static int[] messageReceiveWindowSize = {500, 400};
     public static int[] mainWindowSize = {400, 600};
 
+    public static int[] minimumDefaultMessageReceiveWindowSize = {500, 400};
+    public static int[] minimumDefaultMainWindowSize = {400, 600};
+
     public static int updateInterval = 30; // seconds
 
     public static ArrayList<QueryData> talkables = new ArrayList<QueryData>();
@@ -39,15 +42,30 @@ public class Config {
                     recvPort = Integer.parseInt(optionSplit[1]);
                 } else if (optionSplit[0].equals("messageReceiveWindowSize")) {
                     String[] sizeSplit = optionSplit[1].split(",");
+
                     if (sizeSplit.length == 2) {
                         messageReceiveWindowSize[0] = Integer.parseInt(sizeSplit[0]);
                         messageReceiveWindowSize[1] = Integer.parseInt(sizeSplit[1]);
+
+                        if (messageReceiveWindowSize[0] < minimumDefaultMessageReceiveWindowSize[0]) {
+                            messageReceiveWindowSize[0] = minimumDefaultMessageReceiveWindowSize[0];
+                        }
+                        if (messageReceiveWindowSize[1] < minimumDefaultMessageReceiveWindowSize[1]) {
+                            messageReceiveWindowSize[1] = minimumDefaultMessageReceiveWindowSize[1];
+                        }
                     }
                 } else if (optionSplit[0].equals("mainWindowSize")) {
                     String[] sizeSplit = optionSplit[1].split(",");
                     if (sizeSplit.length == 2) {
                         mainWindowSize[0] = Integer.parseInt(sizeSplit[0]);
                         mainWindowSize[1] = Integer.parseInt(sizeSplit[1]);
+
+                        if (mainWindowSize[0] < minimumDefaultMainWindowSize[0]) {
+                            mainWindowSize[0] = minimumDefaultMainWindowSize[0];
+                        }
+                        if (mainWindowSize[1] < minimumDefaultMainWindowSize[1]) {
+                            mainWindowSize[1] = minimumDefaultMainWindowSize[1];
+                        }
                     }
                 } else if (optionSplit[0].equals("updateInterval")) {
                     updateInterval = Integer.parseInt(optionSplit[1]);
