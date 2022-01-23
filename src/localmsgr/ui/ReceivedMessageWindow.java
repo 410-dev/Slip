@@ -15,6 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.event.MouseInputAdapter;
 
 import java.awt.event.KeyAdapter;
+import java.awt.Dimension;
 
 import localmsgr.CoreBase64;
 import localmsgr.FileIO;
@@ -57,8 +58,12 @@ public class ReceivedMessageWindow extends JFrame {
         setSaveAttachedFileButtonListener();
         setShiftEnterToReply();
 
+        Dimension d = new Dimension();
+        d.setSize(Config.messageReceiveWindowSize[0], Config.messageReceiveWindowSize[1]);
+
         this.setTitle("Message from " + qd.name);
-        this.setSize(Config.messageReceiveWindowSize[0], Config.messageReceiveWindowSize[1]);
+        this.setSize(d);
+        this.setMinimumSize(d);
         setResizable(false);
 
         contentPane = new JLayeredPane();
@@ -121,9 +126,29 @@ public class ReceivedMessageWindow extends JFrame {
 
         saveAttachedFileButton.setVisible(true);
         contentPane.add(saveAttachedFileButton);
-        
+
+
+        this.setAlwaysOnTop(true);
+        this.toFront();
+        this.requestFocus();
+        this.pack();
+
         this.setContentPane(contentPane);
         this.setVisible(true);
+        
+        Thread alwaysOnTopDisableOnFocus = new Thread() {
+            public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(100);
+                        setAlwaysOnTop(!isFocused());
+                        if (!isAlwaysOnTop()) break;
+                    }catch(Exception ignored){}
+                }
+                SystemLogger.log("On Top disabled.");
+            }
+        };
+        alwaysOnTopDisableOnFocus.start();
     }
 
     private void setShiftEnterToReply() {
