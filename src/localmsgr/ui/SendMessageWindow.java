@@ -198,11 +198,13 @@ public class SendMessageWindow extends JFrame {
             messageArea.append("\n\n*************\nFile Attached: " + fileName + "\n*************\n\n");
         }
 
+        String messageFromBoxNTHREAD = messageArea.getText();
+
         sendButton.setText("Sending...");
         sendButton.setEnabled(false);
         Thread t = new Thread() {
             public void run() {
-                String message = CoreBase64.encode(messageFromBox);
+                String message = CoreBase64.encode(messageFromBoxNTHREAD);
                 MessageData qd = new MessageData(Config.myIP, Config.myName, Config.recvPort, message, DateManager.getTimestamp());
 
                 if (fileName != null && fileContentBase64Encoded != null) {
