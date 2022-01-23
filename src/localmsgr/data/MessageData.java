@@ -108,10 +108,10 @@ public class MessageData {
                 q.date = value;
             } else if (key.equals("MESSAGE")) {                       // Message
                 q.message = value;
-            } else {                                                  // If the key is not valid, nullify the instance.
-                SystemLogger.error("Unknown key value: " + key + ". Invalidating this QD.", false, SystemLogger.CONTINUE, null);
-                q = null;
-                break;
+            } else if (key.equals("FILENAME")) {                      // File Name
+                q.fileName = value;
+            } else if (key.equals("FILECONTENT")) {                   // File Content
+                q.fileContent = value;
             }
         }
 
