@@ -33,12 +33,12 @@ public class ReceivedMessageWindow extends JFrame {
     public JTextArea messageArea;
     public JScrollPane messageScrollPane;
 
-    public JButton closeButton;
+    public JButton pinButton;
     public JButton replyButton;
     public JButton saveButton;
     public JButton saveAttachedFileButton;
 
-    public MouseInputAdapter closeButtonListener;
+    public MouseInputAdapter pinButtonListener;
     public MouseInputAdapter replyButtonListener;
     public MouseInputAdapter saveButtonListener;
     public MouseInputAdapter saveAttachedFileButtonListener;
@@ -52,7 +52,7 @@ public class ReceivedMessageWindow extends JFrame {
         this.qd = qd;
         // notification = new NotificationFrame(qd.name);
 
-        setCloseButtonListener();
+        setPinButtonListener();
         setReplyButtonListener();
         setSaveButtonListener();
         setSaveAttachedFileButtonListener();
@@ -93,11 +93,11 @@ public class ReceivedMessageWindow extends JFrame {
         messageScrollPane.setVisible(true);
         contentPane.add(messageScrollPane);
 
-        closeButton = new JButton("Close");
-        closeButton.setBounds(10, Config.messageReceiveWindowSize[1] - 55, 100, 30);
-        closeButton.addMouseListener(closeButtonListener);
-        closeButton.setVisible(true);
-        contentPane.add(closeButton);
+        pinButton = new JButton("Pin on Top");
+        pinButton.setBounds(10, Config.messageReceiveWindowSize[1] - 55, 100, 30);
+        pinButton.addMouseListener(pinButtonListener);
+        pinButton.setVisible(true);
+        contentPane.add(pinButton);
 
         replyButton = new JButton("Reply");
         replyButton.setBounds(120, Config.messageReceiveWindowSize[1] - 55, 100, 30);
@@ -105,7 +105,7 @@ public class ReceivedMessageWindow extends JFrame {
         replyButton.setVisible(true);
         contentPane.add(replyButton);
 
-        saveButton = new JButton("Save");
+        saveButton = new JButton("Save Text");
         saveButton.setBounds(230, Config.messageReceiveWindowSize[1] - 55, 100, 30);
         saveButton.addMouseListener(saveButtonListener);
         saveButton.setVisible(true);
@@ -161,11 +161,17 @@ public class ReceivedMessageWindow extends JFrame {
         };
     }
 
-    public void setCloseButtonListener() {
-        closeButtonListener = new MouseInputAdapter() {
+    public void setPinButtonListener() {
+        pinButtonListener = new MouseInputAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                dispose();
+                if (isAlwaysOnTop()) {
+                    setAlwaysOnTop(false);
+                    pinButton.setText("Pin on Top");
+                }else{
+                    setAlwaysOnTop(true);
+                    pinButton.setText("Unpin");
+                }
             }
         };
     }
