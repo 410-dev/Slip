@@ -185,8 +185,13 @@ public class SendMessageWindow extends JFrame {
     public void send() {
         String messageFromBox = messageArea.getText();
         if (messageFromBox.equals("")) {
-            SystemLogger.warning("Message is empty.");
-            return;
+            if (fileName != null && fileContentBase64Encoded != null) {
+                SystemLogger.log("Empty message field, but will be ignored because file is attached.");
+            }else{
+                JOptionPane.showMessageDialog(null, "Message cannot be empty.");
+                SystemLogger.warning("Message is empty.");
+                return;
+            }
         }
         
         if (fileName != null && fileContentBase64Encoded != null) {
