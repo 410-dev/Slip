@@ -89,7 +89,7 @@ public class MainWindow extends JFrame {
         list.setVisible(true);
         contentPane.add(list);
 
-        exitButton = new JButton("Quit (Offline)");
+        exitButton = new JButton("Quit");
         exitButton.setBounds(10, Config.mainWindowSize[1] - 50, Config.mainWindowSize[0] - 20, 20);
         exitButton.addMouseListener(exitButtonListener);
         exitButton.setVisible(true);
