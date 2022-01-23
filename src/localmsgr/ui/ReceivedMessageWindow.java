@@ -44,9 +44,12 @@ public class ReceivedMessageWindow extends JFrame {
 
     public KeyAdapter onPressShiftEnterToReply;
 
+    // public NotificationFrame notification;
+
     public ReceivedMessageWindow(MessageData qd) {
 
         this.qd = qd;
+        // notification = new NotificationFrame(qd.name);
 
         setCloseButtonListener();
         setReplyButtonListener();
