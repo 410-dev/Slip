@@ -147,14 +147,17 @@ public class MainWindow extends JFrame {
 
     public void updateList() {
         try {
-            listModel.clear();
+            DefaultListModel<String> model = new DefaultListModel<>();
             for (MessageData q : Config.talkables) {
                 if (q.compatible) {
-                    listModel.addElement(q.name + " (" + q.ip + ")");
+                    model.addElement(q.name + " (" + q.ip + ")");
                 } else {
-                    listModel.addElement(q.name + " (Incompatible)");
+                    model.addElement(q.name + " (Incompatible)");
                 }
             }
+
+            list.setModel(model);
+            listModel = model;
         }catch(Exception e) {
             SystemLogger.log("Error while updating list: " + e.getMessage());
         }
