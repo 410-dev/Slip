@@ -89,7 +89,6 @@ public class MainWindow extends JFrame {
 
         listModel = new DefaultListModel<String>();
         list = new JList<String>(listModel);
-        list.setBounds(10, 130, Config.mainWindowSize[0] - 20, Config.mainWindowSize[1] - 190);
         manualAddress = new JTextField();
         manualAddress.setBounds(10, 130, Config.mainWindowSize[0] - 130, 20);
         manualAddress.setText(LocalNetwork.networkPrefix);
@@ -103,6 +102,7 @@ public class MainWindow extends JFrame {
         manualSend.addMouseListener(manualSendListener);
         contentPane.add(manualSend);
 
+        list.setBounds(10, 160, Config.mainWindowSize[0] - 20, Config.mainWindowSize[1] - 220);
         list.addMouseListener(listListener);
         list.setVisible(true);
         contentPane.add(list);
