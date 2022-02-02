@@ -13,6 +13,8 @@ public class Config {
 
     public static final int configVersion = 1;
     public static final int communicationProtocolVersion = 2;
+    public static final int BUILD_NUM = 10;
+    public static final String updateInfURL = "https://raw.githubusercontent.com/410-dev/Slip/main/updateinf";
     public static final String programVersion = "2.3";
 
     public static String myIP = "";
