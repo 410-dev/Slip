@@ -42,6 +42,7 @@ public class MainWindow extends JFrame {
     public MouseInputAdapter manualSendListener;
 
     public KeyAdapter onPressEnterToSaveName;
+    public KeyAdapter onPressEnterToManualSend;
 
     public MainWindow() {
         setTitle("Slip");
@@ -92,6 +93,7 @@ public class MainWindow extends JFrame {
         manualAddress = new JTextField();
         manualAddress.setBounds(10, 130, Config.mainWindowSize[0] - 130, 20);
         manualAddress.setText(LocalNetwork.networkPrefix);
+        manualAddress.addKeyListener(onPressEnterToManualSend);
         manualAddress.setVisible(true);
         contentPane.add(manualAddress);
 
@@ -231,23 +233,35 @@ public class MainWindow extends JFrame {
     public void setManualSendListener() {
         manualSendListener = new MouseInputAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (!manualAddress.getText().startsWith(LocalNetwork.networkPrefix) || manualAddress.getText().equals(LocalNetwork.networkPrefix)) {
-                    SystemLogger.error("Please enter a valid IP address.", true, SystemLogger.CONTINUE, null);
-                }
-
-                try {
-                    int lastIP = Integer.parseInt(manualAddress.getText().replace(LocalNetwork.networkPrefix, ""));
-                    if (lastIP > 255 || lastIP < 1) {
-                        SystemLogger.error("Please enter a valid IP address.", true, SystemLogger.CONTINUE, null);
-                        return;
-                    }
-                }catch(Exception e) {
-                    SystemLogger.error("Please enter a valid IP address.", true, SystemLogger.CONTINUE, null);
-                    return;
-                }
-
-                new SendMessageWindow("Manual Send", manualAddress.getText(), -1, null);
+                manualSend();
             }
         };
+
+        onPressEnterToManualSend = new KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    manualSend();
+                }
+            }
+        };
+    }
+
+    private void manualSend() {
+        if (!manualAddress.getText().startsWith(LocalNetwork.networkPrefix) || manualAddress.getText().equals(LocalNetwork.networkPrefix)) {
+            SystemLogger.error("Please enter a valid IP address.", true, SystemLogger.CONTINUE, null);
+        }
+
+        try {
+            int lastIP = Integer.parseInt(manualAddress.getText().replace(LocalNetwork.networkPrefix, ""));
+            if (lastIP > 255 || lastIP < 1) {
+                SystemLogger.error("Please enter a valid IP address.", true, SystemLogger.CONTINUE, null);
+                return;
+            }
+        }catch(Exception e) {
+            SystemLogger.error("Please enter a valid IP address.", true, SystemLogger.CONTINUE, null);
+            return;
+        }
+
+        new SendMessageWindow("Manual Send", manualAddress.getText(), -1, null);
     }
 }
