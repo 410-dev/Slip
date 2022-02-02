@@ -48,3 +48,6 @@ options_localslip.txt file is a option file that contains the application config
   - Time that will scan the network automatically
   - Default: 30
 
+
+
+Sound effect provided by Mixkit.

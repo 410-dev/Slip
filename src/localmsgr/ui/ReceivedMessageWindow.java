@@ -19,6 +19,7 @@ import java.awt.Dimension;
 
 import localmsgr.CoreBase64;
 import localmsgr.FileIO;
+import localmsgr.NotificationSound;
 import localmsgr.Config;
 import localmsgr.SystemLogger;
 import localmsgr.data.MessageData;
@@ -51,6 +52,7 @@ public class ReceivedMessageWindow extends JFrame {
 
         this.qd = qd;
         // notification = new NotificationFrame(qd.name);
+        new NotificationSound().playSound();
 
         setPinButtonListener();
         setReplyButtonListener();
