@@ -31,11 +31,15 @@ public class MainWindow extends JFrame {
     public JTextField nameTextField;
 
     public DefaultListModel<String> listModel;
+    public JTextField manualAddress;
+    public JButton manualSend;
+
     public JList<String> list;
 
     public MouseInputAdapter rescanButtonListener;
     public MouseInputAdapter exitButtonListener;
     public MouseInputAdapter listListener;
+    public MouseInputAdapter manualSendListener;
 
     public KeyAdapter onPressEnterToSaveName;
 
@@ -48,6 +52,7 @@ public class MainWindow extends JFrame {
         setRescanButtonListener();
         setExitButtonListener();
         setListListener();
+        setManualSendListener();
 
         contentPane = new JLayeredPane();
         contentPane.setLayout(null);
@@ -85,6 +90,19 @@ public class MainWindow extends JFrame {
         listModel = new DefaultListModel<String>();
         list = new JList<String>(listModel);
         list.setBounds(10, 130, Config.mainWindowSize[0] - 20, Config.mainWindowSize[1] - 190);
+        manualAddress = new JTextField();
+        manualAddress.setBounds(10, 130, Config.mainWindowSize[0] - 130, 20);
+        manualAddress.setText(LocalNetwork.networkPrefix);
+        manualAddress.setVisible(true);
+        contentPane.add(manualAddress);
+
+        manualSend = new JButton();
+        manualSend.setBounds(Config.mainWindowSize[0] - 120, 130, 110, 20);
+        manualSend.setText("Manual Send");
+        manualSend.setVisible(true);
+        manualSend.addMouseListener(manualSendListener);
+        contentPane.add(manualSend);
+
         list.addMouseListener(listListener);
         list.setVisible(true);
         contentPane.add(list);
@@ -206,6 +224,29 @@ public class MainWindow extends JFrame {
                         }
                     }
                 }
+            }
+        };
+    }
+
+    public void setManualSendListener() {
+        manualSendListener = new MouseInputAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (!manualAddress.getText().startsWith(LocalNetwork.networkPrefix) || manualAddress.getText().equals(LocalNetwork.networkPrefix)) {
+                    SystemLogger.error("Please enter a valid IP address.", true, SystemLogger.CONTINUE, null);
+                }
+
+                try {
+                    int lastIP = Integer.parseInt(manualAddress.getText().replace(LocalNetwork.networkPrefix, ""));
+                    if (lastIP > 255 || lastIP < 1) {
+                        SystemLogger.error("Please enter a valid IP address.", true, SystemLogger.CONTINUE, null);
+                        return;
+                    }
+                }catch(Exception e) {
+                    SystemLogger.error("Please enter a valid IP address.", true, SystemLogger.CONTINUE, null);
+                    return;
+                }
+
+                new SendMessageWindow("Manual Send", manualAddress.getText(), -1, null);
             }
         };
     }

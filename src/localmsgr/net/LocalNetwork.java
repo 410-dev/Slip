@@ -11,6 +11,8 @@ import localmsgr.data.MessageData;
 
 public class LocalNetwork {
 
+    public static String networkPrefix = "";
+
     public static String getNetworkAddress() {
         try {
 
@@ -34,6 +36,7 @@ public class LocalNetwork {
     public static void scanPortOpenDevices() {
         String[] ipComponents = Config.myIP.split("\\.");
         String localNetworkIP = ipComponents[0] + "." + ipComponents[1] + "." + ipComponents[2] + ".";
+        networkPrefix = localNetworkIP;
     
         // Scan the local network in multithread (Faster)
         Thread[] threads = new Thread[255];

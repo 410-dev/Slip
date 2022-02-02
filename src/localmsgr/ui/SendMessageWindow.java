@@ -8,6 +8,7 @@ import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.MouseInputAdapter;
 
 import java.awt.event.KeyAdapter;
@@ -25,6 +26,7 @@ public class SendMessageWindow extends JFrame {
     public JLayeredPane contentPane;
 
     public JLabel infoLabel;
+    public JTextField portField;
 
     public JTextArea messageArea;
     public JScrollPane messageScrollPane;
@@ -68,6 +70,12 @@ public class SendMessageWindow extends JFrame {
         infoLabel.setBounds(10, 10, Config.messageReceiveWindowSize[0], 20);
         infoLabel.setVisible(true);
         contentPane.add(infoLabel);
+
+        portField = new JTextField(Config.recvPort);
+        portField.setBounds(Config.messageReceiveWindowSize[0] - 80, 10, 70, 20);
+        portField.setText(Config.recvPort + "");
+        portField.setVisible(port == -1);
+        contentPane.add(portField);
 
         messageArea = new JTextArea();
         messageArea.setEditable(true);
@@ -211,16 +219,24 @@ public class SendMessageWindow extends JFrame {
                     qd.fileName = CoreBase64.encode(fileName);
                     qd.fileContent = fileContentBase64Encoded;
                 }
-
-                boolean sent = SocketIO.sendData(ip, port, qd.buildString());
-                if (sent) {
-                    SystemLogger.log("Message sent.");
-                    dispose();
-                    JOptionPane.showMessageDialog(null, "Message successfully sent.");
-                }else{
-                    SystemLogger.error("Message failed to send. Perhaps the recipient is no longer online?", true, SystemLogger.CONTINUE, null);
-                    sendButton.setText("Send");
-                    sendButton.setEnabled(true);
+                try {
+                    int port = Integer.parseInt(portField.getText());
+                    if (port < 1 || port > 65535) {
+                        SystemLogger.error("Please enter a valid port number. (1-65535)", true, SystemLogger.CONTINUE, null);
+                        return;
+                    }
+                    boolean sent = SocketIO.sendData(ip, port, qd.buildString());
+                    if (sent) {
+                        SystemLogger.log("Message sent.");
+                        dispose();
+                        JOptionPane.showMessageDialog(null, "Message successfully sent.");
+                    }else{
+                        SystemLogger.error("Message failed to send. Perhaps the recipient is no longer online?", true, SystemLogger.CONTINUE, null);
+                        sendButton.setText("Send");
+                        sendButton.setEnabled(true);
+                    }
+                }catch(Exception e) {
+                    SystemLogger.error("Please enter valid port (1-65535).", true, SystemLogger.CONTINUE, null);
                 }
             }
         };
